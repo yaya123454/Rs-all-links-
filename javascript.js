@@ -188,9 +188,25 @@ document.addEventListener('keydown', e => {
 });
 
 let autoTimer = setInterval(next, 6000);
-tvScreen.addEventListener('click', () => {
+let isMobile = window.innerWidth <= 768;
+const MOBILE_INTERVAL = 12000;
+const DESKTOP_INTERVAL = 8000;
+
+function resetAutoTimer() {
   clearInterval(autoTimer);
-  autoTimer = setInterval(next, 8000);
+  autoTimer = setInterval(next, isMobile ? MOBILE_INTERVAL : DESKTOP_INTERVAL);
+}
+
+tvScreen.addEventListener('click', () => {
+  resetAutoTimer();
+});
+
+window.addEventListener('resize', () => {
+  const wasMobile = isMobile;
+  isMobile = window.innerWidth <= 768;
+  if (wasMobile !== isMobile) {
+    resetAutoTimer();
+  }
 });
 
 // ── RENDER LOOP ───────────────────────────────────────────────────
